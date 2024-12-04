@@ -91,6 +91,7 @@ class LeituraDeArquivoPDFAgenda(InterfaceDeLeituraDeArquivo):
         try:
             cabecalho = conteudo[:60]
             novoconteudo = conteudo.replace(cabecalho,"")
+            print("teste", type(novoconteudo))
             return novoconteudo
         except Exception as e:
             return {f"erro ao extrair cabecalho {e}"}

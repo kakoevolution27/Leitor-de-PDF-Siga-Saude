@@ -1,7 +1,7 @@
 
 from classes import EscritorDeArquivosExcel, LeituraDeArquivoPDFAgenda, ManipuladorDeArquivos
 
-path = []
+path = [r"C:\Users\ADM\Desktop\REL_IMP_AGD_PROF_LOCAL_2787253_20241204103244_1272476123193551.pdf"]
 
 def main():
     manipulador_de_arquivos = ManipuladorDeArquivos()
