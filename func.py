@@ -16,6 +16,7 @@ def extrair_texto_pdf(pdf):
         texto += pagina.extract_text()
     return texto
 
+
 def ext_teste(pdf):
     txt = []
     str = ""

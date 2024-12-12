@@ -19,22 +19,13 @@ class InterfaceDeManipulacaoDoArquivo(ABC):
 
 
 class InterfaceDeLeituraDeArquivo(ABC):
-
     @abstractmethod
     def extrair_texto_pdf(self, PDF):
         """Extrai texto de um arquivo PDF."""
         pass
 
 
-    @abstractmethod
-    def limpar_conteudo(self, conteudo):
-        """Limpa o conteúdo do arquivo para processar."""
-        pass
-
-    @abstractmethod
-    def formatar_dados(self, PDF):
-        """Formata os dados extraídos do arquivo."""
-        pass
+    
 
 
 # Interface para escrita
@@ -45,4 +36,15 @@ class InterfaceDeEscrita(ABC):
         pass
 
     def salvar_arquivo_excel():
+        pass
+
+class InterfaceFormataçãoDosDados(ABC):
+    @abstractmethod
+    def limpar_conteudo(self, conteudo):
+        """Limpa o conteúdo do arquivo para processar."""
+        pass
+
+    @abstractmethod
+    def formatar_dados(self, PDF):
+        """Formata os dados extraídos do arquivo."""
         pass

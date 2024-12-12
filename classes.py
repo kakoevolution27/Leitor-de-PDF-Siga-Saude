@@ -57,7 +57,6 @@ class LeituraDeArquivoPDFAgenda(InterfaceDeLeituraDeArquivo):
 
     def extrair_texto_primeira_coluna(self, PDF):
         retorno = []
-        
         try:
             for pagina in PDF.pages:
                 primeira_coluna_documento = (50.77,0,110, pagina.height)
@@ -140,6 +139,9 @@ class LeituraDeArquivoPDFAgenda(InterfaceDeLeituraDeArquivo):
                         linha = linha.replace("nte", "")
                         linha = linha.replace("nt", "")
                         linha = linha.replace("t", "")
+                        linha = linha.replace("(", "")
+                        linha = linha.replace("  11", "")
+                        linha = linha.replace("11 ", "")
                         sublista.append(linha)
 
                     
