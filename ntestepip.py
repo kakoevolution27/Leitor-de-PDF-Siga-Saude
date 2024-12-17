@@ -1,15 +1,24 @@
-from classi import ManipuladorDePdf, LeituraDeArquivoPdfAgenda, FormatadorDeDados
+from classi import ManipuladorDePdf, LeituraDeArquivoPdfAgenda, FormatadorDeDados, EscritorDeTexto
 import pandas as pd
-path = [r"C:\Users\ADM\Desktop\agenda\13.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241212115031_756336592814342.pdf",
-        r"C:\Users\ADM\Desktop\agenda\13.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241212115105_756370967981833.pdf",
-        r"C:\Users\ADM\Desktop\agenda\13.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241212115127_756392523960357.pdf",
-        r"C:\Users\ADM\Desktop\agenda\13.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241212115218_756443813841690.pdf"]
+path = [r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217103442_3457838298716656.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217103606_3457922476371479.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217103725_3458001486007737.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104622_3458539129125078.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104812_3458648893630119.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104840_3458677105706570.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104909_3458705460513385.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104934_3458730914801434.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104958_3458755052029141.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217105023_3458779424511313.pdf",
+        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217105042_3458799155548522.pdf",
+]
 
 def main():
     for i , p in enumerate(path):
         manipuladorDeArquivos = ManipuladorDePdf()
         leitorDeArquivos = LeituraDeArquivoPdfAgenda()
         formatadorDeDados = FormatadorDeDados()
+        escritor = EscritorDeTexto()
         pdf = manipuladorDeArquivos.abrir_arquivo(p)
         texto = leitorDeArquivos.extrair_texto_segunda_coluna(pdf)
         texto1 = leitorDeArquivos.extrair_texto_primeira_coluna(pdf)
@@ -26,6 +35,7 @@ def main():
         tel2 = formatadorDeDados.gerar_telefones(array)[1]
         profissional = formatadorDeDados.gerar_profissional(array, cabecalho)
         data = formatadorDeDados.gerar_Data(array, cabecalho)
+        
       
         dados = {"nome": pd.Series(nomes),
                 "sus": pd.Series(sus),
@@ -37,12 +47,10 @@ def main():
                 "hora": pd.Series(hora)
             }
         df = pd.DataFrame(dados)
-        df.to_csv(f"dados {i}.csv", index=False, sep=";")
+        #escritor.escrever_texto()
+        df.to_csv(f"./residuos/dados {i}.csv", index=False, sep=";")
         manipuladorDeArquivos.fechar_arquivo(pdf)
     
-
-
-
 
 if __name__ == "__main__":
     main()

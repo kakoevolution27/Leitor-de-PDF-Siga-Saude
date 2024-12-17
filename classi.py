@@ -30,7 +30,6 @@ class LeituraDeArquivoPdfAgenda(InterfaceDeLeituraDeArquivo):
                 texto_da_segunda_coluna_formatado = texto_extraido.replace('\n', ';')
                 if texto_da_segunda_coluna_formatado: 
                      retorno.append(texto_da_segunda_coluna_formatado)
-
             return "".join(retorno)
         except Exception as e:
             print(f"Erro ao extrair segunda coluna: {e}")
@@ -91,103 +90,90 @@ class FormatadorDeDados():
             verificados.append(len(lista))
         
         print(verificados)
+
     def isnum(self, s):
-            try:
-                int(s)
-                return True
-            except ValueError:
-                return False
+        return s.isdigit()
 
     def limpar_nomes(self, conteudo: list):
-                arr_de_nomes = []
-                narr_de_nomes = []
-                nnarr_nomes = []
-    
-                for cont in conteudo:
-                    arr_de_nomes.append(cont[0:2])
+            nnarr_nomes = []
+            for cont in conteudo:
+                # Extrai os primeiros dois caracteres
+                nome = cont[0:2]
+                sep = nome[1].split()
 
-                for nome in arr_de_nomes:
-                    sep = nome[1].split(" ") 
-                    if len(sep) > 1:
-                        if self.isnum(sep[0]):
-                            narr_de_nomes.append(nome[0])
-                        else:
-                            narr_de_nomes.append(nome[1])
+                # Verifica se há mais de um item após o split
+                if len(sep) > 1:
+                    # Verifica se o primeiro item é um número
+                    if self.isnum(sep[0]):
+                        nome_final = nome[0]
                     else:
-                        narr_de_nomes.append(nome[0])
+                        nome_final = nome[1]
+                else:
+                    nome_final = nome[0]
 
+                # Adiciona ao resultado se o nome contiver um espaço
+                if " " in nome_final:
+                    nnarr_nomes.append(nome_final)
 
-                for nome in narr_de_nomes:
-                    if " " in nome:
-                        nnarr_nomes.append(nome)
-                    else: 
-                        continue
-
-                return nnarr_nomes
+            return nnarr_nomes
 
     def gerarsep(self, arr:list):
     #é pra ser usada dentro de um loop for
     #encontra o numero do sus dentro de uma lista
         for i, linha in enumerate(arr):
-            termos = linha.split(" ")
-            for j, ter in enumerate(termos):
-                try:
-                    int(ter)
+            termos = linha.split()
+            for termo in termos:
+                # Verifica se o termo é um número
+                if termo.isdigit():
                     return i
-                except ValueError:
-                    pass
         return None
 
-    def gerar_telefones(self, conteudo:list):
+    def gerar_telefones(self, conteudo: list):
         lista = []
         lista2 = []
         for conte in conteudo:
             for cont in conte:
-                index_tel_cel = cont.find("Tel Cel: ") 
-                index_tel_com = cont.find("Tel Com: ")
-
-                if index_tel_com != -1:
-                    index = index_tel_com + 9
-                    telefones = cont[index:].split("Tel Cont: ")
-                    if len(telefones) >= 1:
-                        lista2.append(telefones)
-
-                if index_tel_cel != -1:
-                    index = index_tel_cel + 9
-                    telefones = cont[index:].split("Tel Res: ")
-                    if len(telefones) >= 1:
-                        lista.append(telefones)
+                # Verifica e processa os telefones de "Tel Com" e "Tel Cel"
+                self._processar_telefone(cont, "Tel Com: ", lista2)
+                self._processar_telefone(cont, "Tel Cel: ", lista)
 
         return lista, lista2
+
+    def _processar_telefone(self, cont: str, tipo_tel: str, lista_destino: list):
+    # Encontra o índice do telefone e processa
+        index = cont.find(tipo_tel)
+        if index != -1:
+            index += len(tipo_tel)
+            telefones = cont[index:].split("Tel Cont: ")[0]  # Pega a parte relevante antes de "Tel Cont"
+            if telefones:
+                lista_destino.append(telefones)
                 
     def gerar_profissional(self, conteudo, cabecalho):
-        tamanho_do_conteudo = len(conteudo)
-        lista = [0] * tamanho_do_conteudo
+        # Extrai a parte do nome do profissional da string 'cabecalho[1]'
         index_inicial = cabecalho[1].find("Profissional: ")
         index_final = cabecalho[1].find(" CNS:")
+
+        # Se o índice final não for encontrado, pegamos o nome até o final da string
         if index_final == -1:
             profissional = cabecalho[1][index_inicial:]
         else: 
-            profissional = cabecalho[1][index_inicial: index_final + 1]
-        
-        
-        profissionais = []
-        
-        for i in lista:
-            profissionais.append(profissional)
+            profissional = cabecalho[1][index_inicial: index_final].strip()
+
+        # Cria a lista de profissionais com o nome extraído, repetido para cada item no conteúdo
+        profissionais = [profissional] * len(conteudo)
         
         return profissionais
 
     def gerar_Data(self, conteudo, cabecalho):
-        tamanho_do_conteudo = len(conteudo)
-        lista = [0] * tamanho_do_conteudo
+        # Encontra a string "Agenda (LOCAL): " no cabeçalho
         index_inicial = cabecalho[4].find("Agenda (LOCAL): ")
-        data = cabecalho[4][index_inicial:].split(" ")[2:]
-        print(data)
-        datas = []
 
-        for i in lista:
-            datas.append("".join(data))
+        # Extrai a data, que está logo após "Agenda (LOCAL): "
+        data = cabecalho[4][index_inicial:].split(" ")[2:]
+
+        # Converte a data para uma string única e repete para o tamanho do conteúdo
+        data_unificada = "".join(data)
+        datas = [data_unificada] * len(conteudo)
         return datas
 
     def limparHora(self, conteudo:str):
@@ -198,11 +184,19 @@ class FormatadorDeDados():
 
     def gerar_sus(self, conteudo:list):
         arr_de_sus = []
+
         for cont in conteudo:
-            try:
-                arr_de_sus.append(cont[self.gerarsep(cont)].split(" ")[0])
-            except ValueError:
-                print('erro')
+            # Verifica se a função 'gerarsep' retorna um índice válido
+            index_sus = self.gerarsep(cont)
+            if index_sus is not None:
+                # Extraímos o SUS, que é a primeira palavra após o índice retornado
+                sus = cont[index_sus].split(" ")[0]
+                arr_de_sus.append(sus)
+            else:
+                # Se não encontrar o SUS, pode-se adicionar um valor default ou logar o erro
+                print('SUS não encontrado na linha.')
+                arr_de_sus.append('SUS não encontrado')
+
         return arr_de_sus
 
     def gerar_prontuario(self, conteudo:list):
@@ -241,6 +235,10 @@ class FormatadorDeDados():
                 continue
        return narr
 
+class EscritorDeTexto():
+    def escrever_texto(self, data):
+        #texto = f"Olá, *{data["nome"]}* Somos da AMA/UBSi JARDIM CASTRO ALVES \n \nViemos por esse meio relembrar que sua consulta com *{}*, será em: *{}* às *{}*. \n\nOBS: A falta prejudica os demais pacientes que estão em fila aguardando o atendimento.\n\n*OBRIGATORIO chegar com antecedência de 30 min.*\n*Atrasos serão tolerados até 5 minutos. após o período de tolerância o atendimento não é garantido*\n*Obrigatório trazer cartão do SUS, documento com foto* \nWa.me/5511«TEL_1» \nWa.me/5511«TEL_2»"
+        pass
  
     
 
