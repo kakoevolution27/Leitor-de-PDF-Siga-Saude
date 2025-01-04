@@ -43,7 +43,7 @@ def main():
             }
         df = pd.DataFrame(dados)
         #escritor.escrever_texto()
-        df.to_csv(fr"C:\Users\ADM\Desktop\RESIDUOS\dados {i}", index=False, sep=";")
+        df.to_csv(fr"C:\Users\ADM\Desktop\RESIDUOS\dados {i}.csv", index=False, sep=";")
         manipuladorDeArquivos.fechar_arquivo(pdf)
     
 
