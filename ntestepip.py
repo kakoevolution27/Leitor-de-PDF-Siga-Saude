@@ -2,9 +2,10 @@ from classi import ManipuladorDePdf, LeituraDeArquivoPdfAgenda, FormatadorDeDado
 import pandas as pd
 
 path = []
+caminhos = open("caminhos.txt").readlines()
 
-for texto in open("caminhos.txt"):
-    path.append(fr"{texto}")
+for texto in caminhos:
+    path.append(fr"{texto.replace("\n", "")}")
 
 
 def main():
