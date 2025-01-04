@@ -1,17 +1,11 @@
 from classi import ManipuladorDePdf, LeituraDeArquivoPdfAgenda, FormatadorDeDados, EscritorDeTexto
 import pandas as pd
-path = [r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217103442_3457838298716656.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217103606_3457922476371479.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217103725_3458001486007737.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104622_3458539129125078.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104812_3458648893630119.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104840_3458677105706570.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104909_3458705460513385.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104934_3458730914801434.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217104958_3458755052029141.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217105023_3458779424511313.pdf",
-        r"C:\Users\ADM\Desktop\agenda\18.12.2024\REL_IMP_AGD_PROF_LOCAL_2787253_20241217105042_3458799155548522.pdf",
-]
+
+path = []
+
+for texto in open("caminhos.txt"):
+    path.append(fr"{texto}")
+
 
 def main():
     for i , p in enumerate(path):
