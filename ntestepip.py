@@ -2,7 +2,7 @@ from classi import ManipuladorDePdf, LeituraDeArquivoPdfAgenda, FormatadorDeDado
 import pandas as pd
 
 path = []
-caminhos = open("caminhos.txt").readlines()
+caminhos = open(fr"C:\Users\ADM\Desktop\caminhos.txt").readlines()
 
 for texto in caminhos:
     path.append(fr"{texto.replace("\n", "")}")
@@ -43,7 +43,7 @@ def main():
             }
         df = pd.DataFrame(dados)
         #escritor.escrever_texto()
-        df.to_csv(f"./residuos/dados {i}.csv", index=False, sep=";")
+        df.to_csv(fr"C:\Users\ADM\Desktop\RESIDUOS\dados {i}", index=False, sep=";")
         manipuladorDeArquivos.fechar_arquivo(pdf)
     
 
