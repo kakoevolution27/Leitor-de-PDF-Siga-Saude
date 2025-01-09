@@ -1,6 +1,7 @@
 from openpyxl import Workbook
 import pdfplumber
-from Interfaces import InterfaceDeEscrita, InterfaceDeLeituraDeArquivo, InterfaceDeManipulacaoDoArquivo
+from Interfaces import InterfaceDeEscrita, InterfaceDeLeituraDeArquivo, InterfaceDeManipulacaoDoArquivo, InterfaceLeituraCsv
+import pandas as pd
 
 class ManipuladorDePdf(InterfaceDeManipulacaoDoArquivo):
     dependencia = pdfplumber
@@ -239,9 +240,16 @@ class EscritorDeTexto():
     def escrever_texto(self, data):
         #texto = f"Olá, *{data["nome"]}* Somos da AMA/UBSi JARDIM CASTRO ALVES \n \nViemos por esse meio relembrar que sua consulta com *{}*, será em: *{}* às *{}*. \n\nOBS: A falta prejudica os demais pacientes que estão em fila aguardando o atendimento.\n\n*OBRIGATORIO chegar com antecedência de 30 min.*\n*Atrasos serão tolerados até 5 minutos. após o período de tolerância o atendimento não é garantido*\n*Obrigatório trazer cartão do SUS, documento com foto* \nWa.me/5511«TEL_1» \nWa.me/5511«TEL_2»"
         pass
- 
-    
 
-    
+
+class LeitorCsv(InterfaceLeituraCsv):
+    def ler_arquivo_csv(self, path: str) -> pd.DataFrame:
+        try:
+            planilha = pd.read_csv(path, ";")
+            return planilha
+        except Exception as e:
+            print("erro ao abrir o arquivo", {e})
+            
+
         
     

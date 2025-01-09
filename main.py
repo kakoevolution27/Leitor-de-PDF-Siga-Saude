@@ -36,7 +36,7 @@ def main():
                 "sus": pd.Series(sus),
                 "prontuarios": pd.Series(prontuarios),
                 "dn": pd.Series(dn),
-                "tel": pd.Series(tel1),
+                "tel inut": pd.Series(tel1),
                 "profissional": pd.Series(profissional),
                 "data": pd.Series(data),
                 "hora": pd.Series(hora)

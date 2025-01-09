@@ -48,3 +48,9 @@ class InterfaceFormataçãoDosDados(ABC):
     def formatar_dados(self, PDF):
         """Formata os dados extraídos do arquivo."""
         pass
+
+class InterfaceLeituraCsv(ABC):
+    @abstractmethod
+    def ler_arquivo_csv(self, conteudo):
+        pass
+
