@@ -1,8 +1,10 @@
 from classi import ManipuladorDePdf, LeituraDeArquivoPdfAgenda, FormatadorDeDados, EscritorDeTexto
 import pandas as pd
 
+caminho_do_txt = fr""
+
 path = []
-caminhos = open(fr"C:\Users\Kaio\Desktop\caminhos.txt").readlines()
+caminhos = open(caminho_do_txt).readlines()
 
 for texto in caminhos:
     path.append(fr"{texto.replace("\n", "")}")
@@ -10,6 +12,7 @@ for texto in caminhos:
 
 def main():
     for i , p in enumerate(path):
+        caminho_destino = fr""
         manipuladorDeArquivos = ManipuladorDePdf()
         leitorDeArquivos = LeituraDeArquivoPdfAgenda()
         formatadorDeDados = FormatadorDeDados()
@@ -43,7 +46,7 @@ def main():
             }
         df = pd.DataFrame(dados)
         #escritor.escrever_texto()
-        df.to_csv(fr"C:\Users\Kaio\Desktop\RESIDUOS\dados {i}.csv", index=False, sep=";")
+        df.to_csv(caminho_destino, index=False, sep=";")
         manipuladorDeArquivos.fechar_arquivo(pdf)
     
 
