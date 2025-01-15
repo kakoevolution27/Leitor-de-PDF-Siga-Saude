@@ -1,7 +1,7 @@
 import pdfplumber
 import unicodedata
 
-path = r"C:\Users\ADM\Desktop\comprovantes\A.M - 968089809.pdf"
+path = r"C:\Users\Kaio\Desktop\comprovantes\A.M - 968089809.pdf"
 def main():
     texts = ""
 
