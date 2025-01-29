@@ -1,21 +1,46 @@
 import pdfplumber
 import unicodedata
+import pandas as pd
+from main import escolher_pasta, recuperar_caminho_do_arquivo
 
-path = r"C:\Users\Kaio\Desktop\comprovantes\A.M - 968089809.pdf"
+pasta_selecionada = escolher_pasta()
+path = recuperar_caminho_do_arquivo(pasta_selecionada)
+
 def main():
-    texts = ""
+    nomes = []
+    datas = []
+    profissionais = []
+    telefones = []
 
-    pdf = pdfplumber.open(path)
+    for i , p in enumerate(path):
+        texts = ""
 
-    for page in pdf.pages:
-        text = page.extract_text()
-        texts += text
-    
-    nome_paciente = encontrar_nome_paciente(texts)
-    data = encontrar_data_hora(texts)
-    profissional = encontrar_profissional_responsavel(texts)
-    recomendacoes = encontrar_recomendacoes(texts)
-    arr = encontrar_endereco_master(texts)
+        pdf = pdfplumber.open(p)
+
+        for page in pdf.pages:
+            text = page.extract_text()
+            texts += text
+        
+        nome_paciente = encontrar_nome_paciente(texts)
+        data = encontrar_data_hora(texts)
+        profissional = encontrar_profissional_responsavel(texts)
+        recomendacoes = encontrar_recomendacoes(texts)
+        arr = encontrar_endereco_master(texts)
+        telefone = encontrar_telefone(texts)
+        nomes.append(nome_paciente)
+        datas.append(data)
+        profissionais.append(profissional)
+        telefones.append(telefone)
+        
+
+    dados = {"nome": pd.Series(nomes),
+                "data": pd.Series(datas),
+                "profissional": pd.Series(profissionais),
+                "telefone": pd.Series(telefones)
+            }
+    df = pd.DataFrame(dados)
+    #escritor.escrever_texto()
+    df.to_csv(fr"C:\Users\Kaio\Desktop\RESIDUOS_COMPROVANTE\dados.csv", index=False, sep=";")
     
 
 def encontrar_nome_paciente(string: str):
@@ -36,6 +61,15 @@ def encontrar_profissional_responsavel(string:str):
     index_inicial = string.find("Profissional resp.: ")
     index_final = string.find("Recomendações: ")
     valor = string[index_inicial+ 20:index_final]
+    if "\n" in valor:
+        valor_modificado = valor.replace("\n", " ")
+        return valor_modificado
+    return valor
+
+def encontrar_telefone(string:str):
+    index_inicial = string.find("Telefone Celular: ")
+    index_final = string.find(" ____________________________________________________________________ ")
+    valor = string[index_inicial: index_final]
     if "\n" in valor:
         valor_modificado = valor.replace("\n", " ")
         return valor_modificado

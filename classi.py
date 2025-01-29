@@ -5,6 +5,7 @@ import pandas as pd
 
 class ManipuladorDePdf(InterfaceDeManipulacaoDoArquivo):
     dependencia = pdfplumber
+    #
     def abrir_arquivo(self, caminho_pdf):
         try:
             arquivo = self.dependencia.open(caminho_pdf)
@@ -12,7 +13,7 @@ class ManipuladorDePdf(InterfaceDeManipulacaoDoArquivo):
             return arquivo
         except Exception as e:
             print(f"Erro ao abrir o arquivo {caminho_pdf}: {e}")
-
+    #
     def fechar_arquivo(self, pdf:Workbook):
         try:
             pdf.close()
