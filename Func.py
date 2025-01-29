@@ -41,7 +41,7 @@ def fechar_arquivo(pdf):
 def extrair_texto_pdf(pdf: pdfplumber.PDF):
     retorno = ""
     for pagina in pdf.pages:
-        coluna_de_dados = (50.77,0,318.222,pagina.height)
+        coluna_de_dados = (50.77,0,315.200,pagina.height)
         texto = pagina.within_bbox(coluna_de_dados).extract_text()
         retorno += texto
     return retorno
@@ -49,12 +49,16 @@ def extrair_texto_pdf(pdf: pdfplumber.PDF):
 def limpar_nomes(texto: str):
     conteudo = texto.split("\n")[1:]
     nnarr_nomes = []
+    
     for cont in conteudo:
     # Extrai os primeiros dois caracteres
         nome = cont[0:2]
-        sep = nome[1].split()
-
-            # Verifica se há mais de um item após o split
+        sep = []
+        if "" or " " in nome[0]:
+            sep = nome[1].split()
+        else:
+            sep = nome[0].split()
+        # Verifica se há mais de um item após o split
         if len(sep) > 1:
             # Verifica se o primeiro item é um número
             if self.isnum(sep[0]):
@@ -64,13 +68,26 @@ def limpar_nomes(texto: str):
         else:
             nome_final = nome[0]
 
-            # Adiciona ao resultado se o nome contiver um espaço
+                # Adiciona ao resultado se o nome contiver um espaço
         if " " in nome_final:
             nnarr_nomes.append(nome_final)
-
     return "\n".join(nnarr_nomes)
 
+def gerar_profissional(conteudo, cabecalho):
+        # Extrai a parte do nome do profissional da string 'cabecalho[1]'
+        index_inicial = cabecalho[1].find("Profissional: ")
+        index_final = cabecalho[1].find(" CNS:")
 
+        # Se o índice final não for encontrado, pegamos o nome até o final da string
+        if index_final == -1:
+            profissional = cabecalho[1][index_inicial:]
+        else: 
+            profissional = cabecalho[1][index_inicial: index_final].strip()
+
+        # Cria a lista de profissionais com o nome extraído, repetido para cada item no conteúdo
+        profissionais = [profissional] * (len(conteudo) - 1)
+        
+        return profissionais
 
 #string1 = "HEITOR VALENTIN DE ALBUQUERQUE\n17:30\nQUEIROZ\n898006261025489 Pront: 22997\nDN:16/10/2021 Idade: 3 R/C: PRETA\nTel Cel: 11 980206612 Tel Res: 11 983698237\nTel Com: NÃO INFORMADO Tel Cont: 11\n954807357\nMãe: FLAVIA ALBUQUERQUE DE ARAUJO\n"
 
@@ -146,11 +163,52 @@ def extrair_telefone(texto):
 def _isnum(string):
         return string.isdigit()
 
+def gerar_Data(conteudo, cabecalho):
+    # Encontra a string "Agenda (LOCAL): " no cabeçalho
+    index_inicial = cabecalho[4].find("Agenda (LOCAL): ")
+
+    # Extrai a data, que está logo após "Agenda (LOCAL): "
+    data = cabecalho[4][index_inicial:].split(" ")[2:]
+
+     # Converte a data para uma string única e repete para o tamanho do conteúdo
+    data_unificada = "".join(data)
+    datas = [data_unificada] * (len(conteudo) - 1)
+    return datas
+
+def gerarsep(texto:str):
+    arr = texto.split("\n")
+    #é pra ser usada dentro de um loop for
+    #encontra o numero do sus dentro de uma lista
+    for i, linha in enumerate(arr):
+        termos = linha.split()
+        for termo in termos:
+            # Verifica se o termo é um número
+            if termo.isdigit():
+                return i
+    return None
+
+def gerar_sus(texto:str):
+        arr_de_sus = []
+        conteudo = texto.split("\n")
+        for cont in conteudo:
+            # Verifica se a função 'gerarsep' retorna um índice válido
+            index_sus = gerarsep(cont)
+            if index_sus is not None:
+                # Extraímos o SUS, que é a primeira palavra após o índice retornado
+                sus = cont[index_sus].split(" ")[0]
+                arr_de_sus.append(sus)
+            else:
+                # Se não encontrar o SUS, pode-se adicionar um valor default ou logar o erro
+                print('SUS não encontrado na linha.')
+                arr_de_sus.append('SUS não encontrado')
+
+        return arr_de_sus
+
 def filtrar_telefones(lista_de_listas):
     #filtra a lista de telefones para garantir que só havera numeros ou string vazias (caso o paciente não tenha numero)
     for index, lista in enumerate(lista_de_listas):   
         for index , item in enumerate(lista):
-            if _isnum(item):
+            if _isnum(item.strip()):
                 continue
             else:
                 del lista[index]

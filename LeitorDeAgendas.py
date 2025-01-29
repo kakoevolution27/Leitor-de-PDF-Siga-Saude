@@ -6,21 +6,26 @@ def main():
 
     for index, path in enumerate(paths):
 
-        arquivo = abrir_arquivo(path)
-
-        string1 = extrair_texto_pdf(arquivo)
-        base = limpar_cabecalho(string1)
-    
-
-        nomes = formatar_nomes(base).split("\n")
-        horarios = eliminar_horarios_invalidos(base).split("\n")
-        tels = extrair_telefone(base)
-        tel_final = filtrar_telefones(tels)
+        try:
+            arquivo = abrir_arquivo(path)
+            string1 = extrair_texto_pdf(arquivo)
+            cabecalho = extrair_cabecalho(arquivo)
+            base = limpar_cabecalho(string1)
+            nomes = formatar_nomes(base).split("\n")
+            horarios = eliminar_horarios_invalidos(base).split("\n")
+            profissionais = gerar_profissional(nomes, cabecalho)
+            data = gerar_Data(nomes, cabecalho)
+            tels = extrair_telefone(base)
+            tel_final = filtrar_telefones(tels)
+        except ValueError as e:
+            print(f"erro {e} no arquivo {path}")
 
         dados = {
             "nomes": pd.Series(nomes),
+            "tels": pd.Series(tels),
+            "profissionais": pd.Series(profissionais),
             "horarios": pd.Series(horarios),
-            "tels": pd.Series(tels)
+            "Data": pd.Series(data)
         }
 
         df = pd.DataFrame(dados)
