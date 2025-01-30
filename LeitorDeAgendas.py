@@ -1,8 +1,13 @@
 from Func import *
 
 def main():
-    pasta_selecionada = escolher_pasta()
-    paths = recuperar_caminho_do_arquivo(pasta_selecionada)
+    teste = True
+    paths = []
+    if teste:
+        paths.append(fr"C:\Users\Kaio\Desktop\agenda\31.01.2025\REL_IMP_AGD_PROF_LOCAL_2787253_20250130103218_239632288983044.pdf")
+    else:
+        pasta_selecionada = escolher_pasta()
+        paths = recuperar_caminho_do_arquivo(pasta_selecionada)
 
     for index, path in enumerate(paths):
 
@@ -16,7 +21,6 @@ def main():
             profissionais = gerar_profissional(nomes, cabecalho)
             data = gerar_Data(nomes, cabecalho)
             tels = extrair_telefone(base)
-            tel_final = filtrar_telefones(tels)
         except ValueError as e:
             print(f"erro {e} no arquivo {path}")
 

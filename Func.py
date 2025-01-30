@@ -46,32 +46,6 @@ def extrair_texto_pdf(pdf: pdfplumber.PDF):
         retorno += texto
     return retorno
 
-def limpar_nomes(texto: str):
-    conteudo = texto.split("\n")[1:]
-    nnarr_nomes = []
-    
-    for cont in conteudo:
-    # Extrai os primeiros dois caracteres
-        nome = cont[0:2]
-        sep = []
-        if "" or " " in nome[0]:
-            sep = nome[1].split()
-        else:
-            sep = nome[0].split()
-        # Verifica se há mais de um item após o split
-        if len(sep) > 1:
-            # Verifica se o primeiro item é um número
-            if self.isnum(sep[0]):
-                nome_final = nome[0]
-            else:
-                nome_final = nome[1]
-        else:
-            nome_final = nome[0]
-
-                # Adiciona ao resultado se o nome contiver um espaço
-        if " " in nome_final:
-            nnarr_nomes.append(nome_final)
-    return "\n".join(nnarr_nomes)
 
 def gerar_profissional(conteudo, cabecalho):
         # Extrai a parte do nome do profissional da string 'cabecalho[1]'
@@ -92,7 +66,6 @@ def gerar_profissional(conteudo, cabecalho):
 #string1 = "HEITOR VALENTIN DE ALBUQUERQUE\n17:30\nQUEIROZ\n898006261025489 Pront: 22997\nDN:16/10/2021 Idade: 3 R/C: PRETA\nTel Cel: 11 980206612 Tel Res: 11 983698237\nTel Com: NÃO INFORMADO Tel Cont: 11\n954807357\nMãe: FLAVIA ALBUQUERQUE DE ARAUJO\n"
 
 def formatar_nomes(texto):
-    conteudo = limpar_nomes(texto)
     s = ""
     lista = texto.split("\n")
     
@@ -123,16 +96,20 @@ def eliminar_horarios_invalidos(texto):
     while index < len(lista):
         item = lista[index]
         if _horario_valido(item):
-            if index > 0 and "Mãe: " in lista[index - 1]:
+            if index >= 0 and "Mãe: " in lista[index - 1]:
                 del lista[index]  # Deleta o item inválido
                 # Não incrementa o index aqui, pois queremos reprocessar o próximo item
                 continue
             else:
-                s += item + "\n"
-                index += 1  # Avança para o próximo item
+                if _horario_valido(lista[(index + 1)]):
+                    del lista[(index - 1)]
+                    del lista[index]
+                    index -= 1
+                else:
+                    s += item + "\n"
+                    index += 1  # Avança para o próximo item
         else:
             index += 1  # Avança para o próximo item
-
     return s
 
 def extrair_cabecalho(PDF):
@@ -161,7 +138,7 @@ def extrair_telefone(texto):
     return tels
 
 def _isnum(string):
-        return string.isdigit()
+    return string.isdigit()
 
 def gerar_Data(conteudo, cabecalho):
     # Encontra a string "Agenda (LOCAL): " no cabeçalho
