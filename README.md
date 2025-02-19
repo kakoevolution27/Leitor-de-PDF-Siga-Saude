@@ -1,6 +1,8 @@
 <h1>*Automação - Leitura de ARQUIVO PDF - SIGA SAÚDE*</h1>
 
-Este projeto surgiu da necessidade de automatizar a leitura de arquivos PDF gerados pelo sistema SIGA SAÚDE. Como o sistema não oferece uma função nativa para exportação de dados em formatos como Excel ou CSV, criamos uma solução para facilitar o processo de envio em massa de mensagens, que é o objetivo final desta automação.
+Este projeto surgiu da necessidade de automatizar a leitura de arquivos PDF gerados pelo sistema SIGA SAÚDE. Como o sistema não oferece uma função nativa para exportação de dados em formatos como Excel ou CSV, criamos uma solução para facilitar o processo de envio em massa de mensagens, que é o objetivo final desta automação. 
+
+No uso diario da aplicação, apontamos um aumento de eficiencia de 76% baseado no tempo anterior para a conclusão do processo.
 
 <h2>*Descrição*</h2>
     O objetivo deste programa é automatizar a extração de dados de arquivos PDF gerados pelo SIGA SAÚDE, especificamente os arquivos PDF-Agenda e PDF-Comprovante. Utilizando as bibliotecas Python PDFPlumber e Pandas, o código é capaz de ler e processar informações     contidas nos PDFs, tornando o fluxo de trabalho muito mais eficiente.
