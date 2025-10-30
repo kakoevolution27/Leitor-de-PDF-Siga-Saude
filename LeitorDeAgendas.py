@@ -4,7 +4,7 @@ def main():
     teste = False
     paths = []
     if teste:
-        paths.append(fr"C:\Users\Kaio\Desktop\agenda\janeiro\31.01.2025\REL_IMP_AGD_PROF_LOCAL_2787253_20250130103218_239632288983044.pdf")
+        paths.append(fr"")
     else:
         pasta_selecionada = escolher_pasta()
         paths = recuperar_caminho_do_arquivo(pasta_selecionada)
@@ -34,7 +34,7 @@ def main():
 
         df = pd.DataFrame(dados)
         #escritor.escrever_texto()
-        df.to_csv(fr"C:\Users\Kaio\Desktop\RESIDUOS\agenda{index}.csv", index=False, sep=";")
+        df.to_csv(fr"", index=False, sep=";")
 
         fechar_arquivo(arquivo)
 
